@@ -2631,6 +2631,7 @@ pub fn trans_crate<'a, 'tcx>(tcx: TyCtxt<'a, 'tcx, 'tcx>,
     });
 
     let metadata_module = ModuleTranslation {
+        name: "metadata".to_string(),
         llcx: shared_ccx.metadata_llcx(),
         llmod: shared_ccx.metadata_llmod(),
     };
@@ -2645,7 +2646,11 @@ pub fn trans_crate<'a, 'tcx>(tcx: TyCtxt<'a, 'tcx, 'tcx>,
     let crate_context_list = CrateContextList::new(&shared_ccx, codegen_units);
 
     let modules = crate_context_list.iter()
-        .map(|ccx| ModuleTranslation { llcx: ccx.llcx(), llmod: ccx.llmod() })
+        .map(|ccx| ModuleTranslation {
+            name: String::from(&ccx.codegen_unit().name[..]),
+            llcx: ccx.llcx(),
+            llmod: ccx.llmod()
+        })
         .collect();
 
     // Skip crate items and just output metadata in -Z no-trans mode.
@@ -2791,6 +2796,7 @@ pub fn trans_crate<'a, 'tcx>(tcx: TyCtxt<'a, 'tcx, 'tcx>,
     }
 
     let linker_info = LinkerInfo::new(&shared_ccx, &reachable_symbols);
+
     CrateTranslation {
         modules: modules,
         metadata_module: metadata_module,
