@@ -121,6 +121,7 @@ mod meth;
 mod mir;
 mod monomorphize;
 mod partitioning;
+mod symbol_map;
 mod symbol_names_test;
 mod trans_item;
 mod tvec;
@@ -128,8 +129,9 @@ mod type_;
 mod type_of;
 mod value;
 
-#[derive(Copy, Clone)]
+#[derive(Clone)]
 pub struct ModuleTranslation {
+    pub name: String,
     pub llcx: llvm::ContextRef,
     pub llmod: llvm::ModuleRef,
 }
